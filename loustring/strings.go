@@ -1,4 +1,4 @@
-package lostring
+package loustring
 
 import jsoniter "github.com/json-iterator/go"
 

@@ -31,6 +31,11 @@ func Register(client *api.Client, service string, ip string, port int, healthChe
 		ID:      fmt.Sprintf(ServiceIDFormat, service, ip, port),
 		Name:    service,
 		Address: ip,
+		Port:    port,
+		Weights: &api.AgentWeights{
+			Passing: 100,
+			Warning: 1,
+		},
 		Check: &api.AgentServiceCheck{
 			CheckID:                        fmt.Sprintf("Check: %s", service),
 			Name:                           fmt.Sprintf("Service %s's check", service),

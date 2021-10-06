@@ -3,6 +3,8 @@ package louconsul
 import (
 	"testing"
 
+	"k8s.io/utils/pointer"
+
 	"github.com/stretchr/testify/assert"
 )
 
@@ -26,4 +28,14 @@ func TestListCatalogService(t *testing.T) {
 		t.Log(endpoints)
 	}
 
+}
+
+func TestRegister2(t *testing.T) {
+	var consulAddr = pointer.StringPtr("192.168.1.236:8500")
+	client, err := NewClient(consulAddr)
+	if err != nil {
+		panic(err)
+	}
+	err = Register(client, "louhwz-test", "192.192.192.192", 8500, "/health")
+	assert.Nil(t, err, "Register Err")
 }

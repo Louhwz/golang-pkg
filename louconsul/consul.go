@@ -27,8 +27,9 @@ func NewClient(addr *string) (*api.Client, error) {
 }
 
 func Register(client *api.Client, service string, ip string, port int, healthCheckURI string) error {
+	id := fmt.Sprintf(ServiceIDFormat, service, ip, port)
 	return client.Agent().ServiceRegister(&api.AgentServiceRegistration{
-		ID:      fmt.Sprintf(ServiceIDFormat, service, ip, port),
+		ID:      id,
 		Name:    service,
 		Address: ip,
 		Port:    port,
@@ -37,8 +38,8 @@ func Register(client *api.Client, service string, ip string, port int, healthChe
 			Warning: 1,
 		},
 		Check: &api.AgentServiceCheck{
-			CheckID:                        fmt.Sprintf("Check: %s", service),
-			Name:                           fmt.Sprintf("Service %s's check", service),
+			CheckID:                        fmt.Sprintf("Check for %v", id),
+			Name:                           fmt.Sprintf("Service %s's check", id),
 			Interval:                       "10s",
 			Timeout:                        "3s",
 			HTTP:                           fmt.Sprintf(healthCheckURIFormat, ip, port, healthCheckURI),

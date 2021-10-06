@@ -4,6 +4,8 @@ import (
 	"fmt"
 
 	"github.com/hashicorp/consul/api"
+	"github.com/louhwz/pkg/loustring"
+	"k8s.io/klog/v2"
 )
 
 const (
@@ -28,7 +30,7 @@ func NewClient(addr *string) (*api.Client, error) {
 
 func Register(client *api.Client, service string, ip string, port int, healthCheckURI string) error {
 	id := fmt.Sprintf(ServiceIDFormat, service, ip, port)
-	return client.Agent().ServiceRegister(&api.AgentServiceRegistration{
+	registration := &api.AgentServiceRegistration{
 		ID:      id,
 		Name:    service,
 		Address: ip,
@@ -47,5 +49,12 @@ func Register(client *api.Client, service string, ip string, port int, healthChe
 			TLSSkipVerify:                  true,
 			DeregisterCriticalServiceAfter: "30s",
 		},
-	})
+	}
+	err := client.Agent().ServiceRegister(registration)
+	if err != nil {
+		klog.Errorf("Register Error. Err=%v. Registration=%v", err, loustring.ToJsonString(registration))
+	} else {
+		klog.Infof("Register Success. Registration=%v", loustring.ToJsonString(registration))
+	}
+	return err
 }

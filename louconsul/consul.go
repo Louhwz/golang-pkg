@@ -47,7 +47,7 @@ func Register(client *api.Client, service string, ip string, port int, _ string)
 			//HTTP:                           fmt.Sprintf(healthCheckURIFormat, ip, port, healthCheckURI),
 			TCP:                            fmt.Sprintf("%v:%v", ip, port),
 			Method:                         "Get",
-			DeregisterCriticalServiceAfter: "90s",
+			DeregisterCriticalServiceAfter: "15s",
 		},
 	}
 	err := client.Agent().ServiceRegister(registration)

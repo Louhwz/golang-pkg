@@ -13,6 +13,8 @@ const (
 	ServiceIDFormat = "%v-%v-%v"
 
 	healthCheckURIFormat = "http://%v:%v%v"
+
+	ProtocolTagName = "protocol"
 )
 
 // NewClient addr format: 127.0.0.1:8500
@@ -28,7 +30,7 @@ func NewClient(addr *string) (*api.Client, error) {
 	return client, err
 }
 
-func Register(client *api.Client, service string, ip string, port int, _ string) error {
+func Register(client *api.Client, service string, ip string, port int, protocol string) error {
 	id := fmt.Sprintf(ServiceIDFormat, service, ip, port)
 	registration := &api.AgentServiceRegistration{
 		ID:      id,
@@ -38,6 +40,9 @@ func Register(client *api.Client, service string, ip string, port int, _ string)
 		Weights: &api.AgentWeights{
 			Passing: 100,
 			Warning: 1,
+		},
+		Meta: map[string]string{
+			ProtocolTagName: protocol,
 		},
 		Check: &api.AgentServiceCheck{
 			CheckID:  fmt.Sprintf("Check for %v", id),

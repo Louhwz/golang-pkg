@@ -8,7 +8,7 @@ import (
 	"github.com/louhwz/pkg/lounetwork"
 )
 
-func Register(consulAddr *string, service, healthCheckURI string, port int) error {
+func Register(consulAddr *string, service, healthCheckURI string, port int, protocol string) error {
 	var (
 		err          error
 		ip           string
@@ -25,6 +25,6 @@ func Register(consulAddr *string, service, healthCheckURI string, port int) erro
 		return fmt.Errorf("can't get pod's local ip")
 	}
 
-	err = louconsul.Register(consulClient, service, ip, port, healthCheckURI)
+	err = louconsul.Register(consulClient, service, ip, port, protocol)
 	return err
 }
